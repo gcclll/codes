@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <input id="test" type="text" name="" value="" />
+    <script>
+      function trigger(el, type) {
+        var e = document.createEvent('HTMLEvents')
+        e.initEvent(type, true, true)
+        el.dispatchEvent(e)
+      }
+
+      trigger(document.getElementById('test'), 'input')
+    </script>
+
+  </body>
+</html>
