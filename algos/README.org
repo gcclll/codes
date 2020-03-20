@@ -1,0 +1,327 @@
+#+STARTUP: indent hidestars
+#+AUTHOR: lizc
+#+TITLE: Leetcode Algorithm Practise
+#+DATE: <2020-03-19 Thu> 
+#+EMAIL: gccll.love@gmail.com
+#+OPTIONS: H:4 toc:t
+#+LAYOUT: post
+#+KEYWORDS: algorithm leetcode
+#+CATEGORIES: algorithm
+#+TAGS: algorithm leetcode javascript python
+
+* easy
+** two sum
+*** 双重循环
+
+#+BEGIN_SRC js
+  function twoSum(nums, target) {
+    for (let i = 0; i < nums.length; i++) {
+      for (let j = i + 1; j < nums.length; j++) {
+        if (target - nums[i] === nums[j]) return [i, j]
+      }
+    }
+
+    return -1
+  }
+#+END_SRC
+
+这种方式直接简单粗暴，双重循环找到头两个数之和为目标值的他们的索引。
+
+最好的情况头两个数之和就是目标值， =T(n) = O(1)= 。
+
+最坏的情况这两个数刚好在数组末尾，需要进行遍历 =(n - 1) * (n - 1)= 次，故 =T(n) = O(n^2)=
+
+这肯定不是最好的方法。
+
+*** map 方式
+
+原理：先取 =i= 位置的 =nums[i]= 和 =target= 的差值 =delta= ，如果存在 =delta + nums[i] = target=
+
+说明数组中就一定存在满足条件的两个数之和等于 =target= 。
+
+主要分三步：预存值，计算差值，差值查找
+
+通过 map 可以很方便的从曾经计算过的值集合中找到第一个满足条件的元素。
+
+#+BEGIN_SRC js
+  function twoSum(nums, target) {
+    let map = new Map()
+    for (let i = 0; i < nums.length; i++) {
+      const delta = target - nums[i]
+      if (map.has(delta)) {
+        return [map.get(delta), i]
+      }
+
+      map.set(nums[i], i)
+    }
+
+    return []
+  }
+#+END_SRC
+
+如果不支持 =map= 也可以改成使用对象存储也是一样的效果，只是相比对象 map 的操作更为便利点(/has, get, set/)。
+** reverse number
+
+将数字反转，如： 123 -> 321, -123 -> -321
+
+*** for 循环
+
+1. 数字转字符串
+2. 字符串倒序遍历
+3. 拼接后转数字
+4. 取正负
+
+#+BEGIN_SRC js
+  /**
+   ,* 1. use for, 72ms/81.46%/35.9mb
+   ,* @param {} x
+   ,* @returns {}
+   ,*/
+  function reverse(x) {
+    const isNeg = x < 0,
+      max = 0x7fffffff
+    const neg = Math.abs(x)
+
+    // overflow
+    if (neg > max) return 0
+
+    const str = neg.toString()
+    const len = str.length
+
+    let res = ''
+    for (let i = len - 1; i >= 0; i--) {
+      res += str[i]
+    }
+
+    if (res > max) return 0
+
+    return isNeg ? -1 * +res : res
+  }
+#+END_SRC
+
+leetcode result: 
+
+#+begin_example
+  Runtime: 72 ms, faster than 81.46% of JavaScript online submissions for Reverse Integer.
+  Memory Usage: 35.9 MB, less than 41.67% of JavaScript online submissions for Reverse Integer.
+#+end_example
+
+*** map
+
+和 for 循环逻辑一致，不同点是将字符串拼接过程改成了 =split('').map(...).join('')= 操作。
+
+效率和 map 相差不大。
+
+#+BEGIN_SRC js
+  /**
+   ,* 2. use map, 76 ms/65.62%/36.1
+   ,* @param {} x
+   ,* @returns {}
+   ,*/
+  function reverse(x) {
+    const isNeg = x < 0,
+      max = 0x7fffffff
+    const neg = Math.abs(x)
+
+    // overflow
+    if (neg > max) return 0
+
+    const str = neg.toString()
+    const len = str.length
+
+    let res = ''
+    res = +str
+      .split('')
+      .map((_, i) => str[len - i - 1])
+      .join('')
+
+    if (res > max) return 0
+
+    return isNeg ? -1 * +res : res
+  }
+#+END_SRC
+
+leetcode result:
+
+#+begin_example
+Runtime: 80 ms, faster than 45.99% of JavaScript online submissions for Reverse Integer.
+Memory Usage: 36.1 MB, less than 21.87% of JavaScript online submissions for Reverse Integer.
+#+end_example
+*** math 运算
+
+纯数学运算方式
+
+1. 去符号
+2. 循环运算
+3. 取余 -> 赋值高位
+4. 符号还原
+
+#+BEGIN_SRC js
+  /**
+   ,* 3. use math operation, 68 ms/92.18%/35.7mb
+   ,* @param {} x
+   ,*/
+  function reverse(x) {
+    let isNeg = x < 0,
+      _x = isNeg ? -1 * x : x
+
+    const max = 0x7fffffff
+
+    if (_x > max) return 0
+
+    let v = 0,
+      n = 0
+
+    while (_x > 0) {
+      n = _x % 10
+      v = v * 10 + n
+      _x = Math.floor(_x / 10)
+    }
+
+    if (v > max) return 0
+
+    return isNeg ? -1 * v : v
+  }
+#+END_SRC
+
+leetcode result:
+
+#+begin_example
+Runtime: 72 ms, faster than 81.46% of JavaScript online submissions for Reverse Integer.
+Memory Usage: 35.5 MB, less than 92.71% of JavaScript online submissions for Reverse Integer.
+#+end_example
+** isPalindrome 回文
+*** use =reverse()= api (字符串倒序转换)
+
+一行搞定，使用原生接口 =reverse()= 反转再比较。
+
+负数反转结果必定不是回文，开头有负号。
+
+#+BEGIN_SRC js
+  const isPalindrome = x =>
+    x > 0 && (x + '')
+      .split('')
+      .reverse()
+      .join('') ===
+    x + ''
+#+END_SRC
+
+leetcode result:
+
+#+begin_example
+Runtime: 204 ms, faster than 51.68% of JavaScript online submissions for Palindrome Number.
+Memory Usage: 45.9 MB, less than 32.76% of JavaScript online submissions for Palindrome Number.
+#+end_example
+
+貌似效率不咋地，花了 204ms。
+*** use for(字符串倒序转换)
+
+过滤掉负数。
+
+#+BEGIN_SRC js
+  /**
+   ,* 2. use `for`
+   ,* @param {number} x
+   ,* @returns {boolean}
+   ,*/
+  function isPalindrome(x) {
+    if (x < 0) return false
+    let s = x + ''
+
+    let v = []
+    for (let i = s.length - 1; i >= 0; i--) {
+      v.push(s[i])
+    }
+
+    return v.join('') === s
+  }
+#+END_SRC
+
+leetcoce result :
+
+#+begin_example
+Runtime: 200 ms, faster than 57.51% of JavaScript online submissions for Palindrome Number.
+Memory Usage: 46 MB, less than 25.86% of JavaScript online submissions for Palindrome Number.
+#+end_example
+*** use string binary comparation(字符串二分比较)
+要满足是回文，从中间均分成左右两段，这两段必定满足：
+
+左段从左开始遍历，右段从右开始遍历，遍历的两个值一定是相等的。
+
+比如： 1221221 -> L: [1, 2, 2], R: [2, 2, 1]
+
+~L[0] === L[2]~
+~L[1] === L[1]~
+~L[2] === L[0]~
+
+因此就有如下实现：
+
+#+BEGIN_SRC js
+  function isPalindrome(x) {
+    if (x < 0) return false
+
+    let s = x + ''
+
+    let l = s.length,
+      isPa = true
+    for (let i = 0; i < l; i++) {
+      const _s = i,
+        _e = l - i - 1
+      const start = s[_s],
+        end = s[_e]
+
+      if (_s > _e) return isPa
+
+      if (start !== end) isPa = false
+    }
+
+    return isPa
+  }
+#+END_SRC
+
+#+begin_example
+Runtime: 208 ms, faster than 45.90% of JavaScript online submissions for Palindrome Number.
+Memory Usage: 45.8 MB, less than 35.34% of JavaScript online submissions for Palindrome Number.
+#+end_example
+*** use math operation(数学运算，取余截取比较)
+
+1. 边界情况：负数，个位数是 0 的数，溢出的数(32bit)
+2. 循环截取 x ，得到左右两个数，右边的数由 x 取余置高位而来
+3. 最后判断要兼顾数字位数是奇数情况，此时的 right 位数是比 x 多一位的
+
+#+BEGIN_SRC js
+  /**
+   ,* 4. use math operation
+   ,* @param {number} x
+   ,* @returns {boolean}
+   ,*/
+  function isPalindrome(x) {
+    // negative is not palindrome
+    if (x < 0 || (x && x % 10 === 0)) return false
+
+    // overflow 32bit
+    if (x > 0x7fffffff) return false
+
+    let right = 0
+    while (x > right) {
+      // reverted num
+      right = right * 10 + (x % 10)
+      // cut num
+      x = Math.floor(x / 10)
+    }
+
+    // if x has even count number, right bits will be one more then x
+    // eg. 12221, x -> 12, right -> 122
+    return x === right || x === Math.floor(right / 10)
+  }
+
+#+END_SRC
+
+leetcode result:
+
+#+begin_example
+Runtime: 176 ms, faster than 91.21% of JavaScript online submissions for Palindrome Number.
+Memory Usage: 44.8 MB, less than 96.55% of JavaScript online submissions for Palindrome Number.
+#+end_example
+
+相比较前面三种方式，这个明显更优，数学运算毕竟比字符串操作更快。
