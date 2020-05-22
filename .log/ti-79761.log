@@ -1,0 +1,11 @@
+[11:27:41.746] Got install request {"projectName":"/dev/null/inferredProject2*","fileNames":["/usr/local/lib/node_modules/typescript/lib/lib.d.ts","/usr/local/lib/node_modules/typescript/lib/lib.es5.d.ts","/usr/local/lib/node_modules/typescript/lib/lib.dom.d.ts","/usr/local/lib/node_modules/typescript/lib/lib.webworker.importscripts.d.ts","/usr/local/lib/node_modules/typescript/lib/lib.scripthost.d.ts","/Users/simon/github/codes/epg/menus/Menu.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/users/simon/github/codes/epg/menus","kind":"discover"}
+[11:27:41.761] Explicitly included types: []
+[11:27:41.770] Inferred typings from unresolved imports: []
+[11:27:41.798] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/Users/simon/github/codes/epg/menus/bower_components","/Users/simon/github/codes/epg/menus/node_modules","/users/simon/github/codes/epg/menus/bower_components","/users/simon/github/codes/epg/menus/node_modules"]}
+[11:27:41.798] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/Users/simon/github/codes/epg/menus/bower_components","/Users/simon/github/codes/epg/menus/node_modules","/users/simon/github/codes/epg/menus/bower_components","/users/simon/github/codes/epg/menus/node_modules"]}
+[11:27:41.801] DirectoryWatcher:: Added:: WatchInfo: /Users/simon/github/codes/epg/menus/bower_components
+[11:27:41.802] DirectoryWatcher:: Added:: WatchInfo: /Users/simon/github/codes/epg/menus/node_modules
+[11:27:41.803] Sending response:
+    {"projectName":"/dev/null/inferredProject2*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+[11:27:41.803] Response has been sent.
+[11:27:41.804] No new typings were requested as a result of typings discovery
